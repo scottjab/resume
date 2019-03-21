@@ -2,7 +2,8 @@
 ## Infrastructure Engineer, Site Reliability Engineer
 
 > [Download PDF](resume.pdf)
-> [scottjab@gmail.com](scottjab@gmail.com)
+> [scottjab@gmail.com](mailto:scottjab@gmail.com)
+> [GitHub](https://github.com/scottjab)
 > (937) 239-4954
 
 ------
