@@ -40,6 +40,7 @@ POLICY
     error_document = "index.html"
   }
 }
+
 resource "aws_s3_bucket" "root" {
   bucket   = "${var.root_domain_name}"
   acl      = "public-read"
@@ -65,14 +66,15 @@ POLICY
     redirect_all_requests_to = "https://${var.www_domain_name}"
   }
 }
+
 resource "aws_s3_bucket_object" "index_html" {
-  bucket     = "${var.www_domain_name}"
-  key        = "index.html"
-  source     = "index.html"
+  bucket       = "${var.www_domain_name}"
+  key          = "index.html"
+  source       = "index.html"
   content_type = "text/html"
-  etag       = "${md5(file("index.html"))}"
-  depends_on = ["aws_s3_bucket.www"]
-  provider   = "aws.us-west-2"
+  etag         = "${md5(file("index.html"))}"
+  depends_on   = ["aws_s3_bucket.www"]
+  provider     = "aws.us-west-2"
 }
 
 resource "aws_s3_bucket_object" "index_pdf" {
@@ -171,6 +173,7 @@ resource "aws_cloudfront_distribution" "www_distribution" {
 
   depends_on = ["aws_acm_certificate.cert", "aws_s3_bucket_object.index_html", "aws_s3_bucket_object.index_pdf"]
 }
+
 resource "aws_cloudfront_distribution" "root_distribution" {
   origin {
     custom_origin_config {
@@ -237,10 +240,6 @@ resource "aws_route53_record" "www" {
     evaluate_target_health = false
   }
 }
-
-
-
-
 
 resource "aws_route53_record" "root" {
   zone_id = "${aws_route53_zone.zone.zone_id}"
