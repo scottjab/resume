@@ -1,6 +1,4 @@
 provider "aws" {
-  //region = "us-west-2"
-
   region = "us-east-1"
 }
 
@@ -42,7 +40,31 @@ POLICY
     error_document = "index.html"
   }
 }
+resource "aws_s3_bucket" "root" {
+  bucket   = "${var.root_domain_name}"
+  acl      = "public-read"
+  provider = "aws.us-west-2"
 
+  policy = <<POLICY
+{
+  "Version":"2012-10-17",
+  "Statement":[
+    {
+      "Sid":"AddPerm",
+      "Effect":"Allow",
+      "Principal": "*",
+      "Action":["s3:GetObject"],
+      "Resource":["arn:aws:s3:::${var.root_domain_name}/*"]
+    }
+  ]
+}
+POLICY
+
+  website {
+    // Note this redirect. Here's where the magic happens.
+    redirect_all_requests_to = "https://${var.www_domain_name}"
+  }
+}
 resource "aws_s3_bucket_object" "index_html" {
   bucket     = "${var.www_domain_name}"
   key        = "index.html"
@@ -149,50 +171,6 @@ resource "aws_cloudfront_distribution" "www_distribution" {
 
   depends_on = ["aws_acm_certificate.cert", "aws_s3_bucket_object.index_html", "aws_s3_bucket_object.index_pdf"]
 }
-
-resource "aws_route53_zone" "zone" {
-  name = "${var.root_domain_name}"
-}
-
-resource "aws_route53_record" "www" {
-  zone_id = "${aws_route53_zone.zone.zone_id}"
-  name    = "${var.www_domain_name}"
-  type    = "A"
-
-  alias {
-    name                   = "${aws_cloudfront_distribution.www_distribution.domain_name}"
-    zone_id                = "${aws_cloudfront_distribution.www_distribution.hosted_zone_id}"
-    evaluate_target_health = false
-  }
-}
-
-# root
-resource "aws_s3_bucket" "root" {
-  bucket   = "${var.root_domain_name}"
-  acl      = "public-read"
-  provider = "aws.us-west-2"
-
-  policy = <<POLICY
-{
-  "Version":"2012-10-17",
-  "Statement":[
-    {
-      "Sid":"AddPerm",
-      "Effect":"Allow",
-      "Principal": "*",
-      "Action":["s3:GetObject"],
-      "Resource":["arn:aws:s3:::${var.root_domain_name}/*"]
-    }
-  ]
-}
-POLICY
-
-  website {
-    // Note this redirect. Here's where the magic happens.
-    redirect_all_requests_to = "https://${var.www_domain_name}"
-  }
-}
-
 resource "aws_cloudfront_distribution" "root_distribution" {
   origin {
     custom_origin_config {
@@ -243,6 +221,26 @@ resource "aws_cloudfront_distribution" "root_distribution" {
 
   depends_on = ["aws_acm_certificate.cert"]
 }
+
+resource "aws_route53_zone" "zone" {
+  name = "${var.root_domain_name}"
+}
+
+resource "aws_route53_record" "www" {
+  zone_id = "${aws_route53_zone.zone.zone_id}"
+  name    = "${var.www_domain_name}"
+  type    = "A"
+
+  alias {
+    name                   = "${aws_cloudfront_distribution.www_distribution.domain_name}"
+    zone_id                = "${aws_cloudfront_distribution.www_distribution.hosted_zone_id}"
+    evaluate_target_health = false
+  }
+}
+
+
+
+
 
 resource "aws_route53_record" "root" {
   zone_id = "${aws_route53_zone.zone.zone_id}"
