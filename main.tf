@@ -1,5 +1,12 @@
 provider "aws" {
+  //region = "us-west-2"
+
+  region = "us-east-1"
+}
+
+provider "aws" {
   region = "us-west-2"
+  alias  = "us-west-2"
 }
 
 variable "www_domain_name" {
@@ -11,8 +18,9 @@ variable "root_domain_name" {
 }
 
 resource "aws_s3_bucket" "www" {
-  bucket = "${var.www_domain_name}"
-  acl    = "public-read"
+  bucket   = "${var.www_domain_name}"
+  acl      = "public-read"
+  provider = "aws.us-west-2"
 
   policy = <<POLICY
 {
@@ -36,23 +44,56 @@ POLICY
 }
 
 resource "aws_s3_bucket_object" "index_html" {
-  bucket = "${var.www_domain_name}"
-  key    = "index.html"
-  source = "index.html"
-  etag   = "${md5(file("index.html"))}"
+  bucket     = "${var.www_domain_name}"
+  key        = "index.html"
+  source     = "index.html"
+  etag       = "${md5(file("index.html"))}"
+  depends_on = ["aws_s3_bucket.www"]
+  provider   = "aws.us-west-2"
 }
 
 resource "aws_s3_bucket_object" "index_pdf" {
-  bucket = "${var.www_domain_name}"
-  key    = "resume.pdf"
-  source = "resume.pdf"
-  etag   = "${md5(file("resume.pdf"))}"
+  bucket     = "${var.www_domain_name}"
+  key        = "resume.pdf"
+  source     = "resume.pdf"
+  etag       = "${md5(file("resume.pdf"))}"
+  depends_on = ["aws_s3_bucket.www"]
+  provider   = "aws.us-west-2"
 }
 
 resource "aws_acm_certificate" "cert" {
-  domain_name               = "*.${var.root_domain_name}"
-  validation_method         = "EMAIL"
-  subject_alternative_names = ["${var.root_domain_name}"]
+  domain_name               = "${var.root_domain_name}"
+  validation_method         = "DNS"
+  subject_alternative_names = ["${var.www_domain_name}"]
+
+  // provider                  = "aws.us-east-1"
+}
+
+// validate 
+resource "aws_route53_record" "cert_validation" {
+  name    = "${aws_acm_certificate.cert.domain_validation_options.0.resource_record_name}"
+  type    = "${aws_acm_certificate.cert.domain_validation_options.0.resource_record_type}"
+  zone_id = "${aws_route53_zone.zone.id}"
+  records = ["${aws_acm_certificate.cert.domain_validation_options.0.resource_record_value}"]
+  ttl     = 60
+
+  //  provider                  = "aws.us-east-1"
+}
+
+resource "aws_route53_record" "cert_validation_alt1" {
+  name    = "${aws_acm_certificate.cert.domain_validation_options.1.resource_record_name}"
+  type    = "${aws_acm_certificate.cert.domain_validation_options.1.resource_record_type}"
+  zone_id = "${aws_route53_zone.zone.id}"
+  records = ["${aws_acm_certificate.cert.domain_validation_options.1.resource_record_value}"]
+  ttl     = 60
+}
+
+resource "aws_acm_certificate_validation" "cert" {
+  certificate_arn = "${aws_acm_certificate.cert.arn}"
+
+  validation_record_fqdns = ["${aws_route53_record.cert_validation.fqdn}",
+    "${aws_route53_record.cert_validation_alt1.fqdn}",
+  ]
 }
 
 resource "aws_cloudfront_distribution" "www_distribution" {
@@ -101,9 +142,11 @@ resource "aws_cloudfront_distribution" "www_distribution" {
 
   // Here's where our certificate is loaded in!
   viewer_certificate {
-    acm_certificate_arn = "${aws_acm_certificate.cert.arn}"
+    acm_certificate_arn = "${aws_acm_certificate_validation.cert.certificate_arn}"
     ssl_support_method  = "sni-only"
   }
+
+  depends_on = ["aws_acm_certificate.cert", "aws_s3_bucket_object.index_html", "aws_s3_bucket_object.index_pdf"]
 }
 
 resource "aws_route53_zone" "zone" {
@@ -124,8 +167,9 @@ resource "aws_route53_record" "www" {
 
 # root
 resource "aws_s3_bucket" "root" {
-  bucket = "${var.root_domain_name}"
-  acl    = "public-read"
+  bucket   = "${var.root_domain_name}"
+  acl      = "public-read"
+  provider = "aws.us-west-2"
 
   policy = <<POLICY
 {
@@ -192,9 +236,11 @@ resource "aws_cloudfront_distribution" "root_distribution" {
   }
 
   viewer_certificate {
-    acm_certificate_arn = "${aws_acm_certificate.cert.arn}"
+    acm_certificate_arn = "${aws_acm_certificate_validation.cert.certificate_arn}"
     ssl_support_method  = "sni-only"
   }
+
+  depends_on = ["aws_acm_certificate.cert"]
 }
 
 resource "aws_route53_record" "root" {
