@@ -47,6 +47,7 @@ resource "aws_s3_bucket_object" "index_html" {
   bucket     = "${var.www_domain_name}"
   key        = "index.html"
   source     = "index.html"
+  content_type = "text/html"
   etag       = "${md5(file("index.html"))}"
   depends_on = ["aws_s3_bucket.www"]
   provider   = "aws.us-west-2"
