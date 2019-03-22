@@ -41,6 +41,36 @@ POLICY
   }
 }
 
+// Apply policy document on bucket.
+
+data "aws_iam_policy_document" "www_policy" {
+  statement {
+    actions   = ["s3:GetObject"]
+    resources = ["${aws_s3_bucket.www.arn}/*"]
+
+    principals {
+      type        = "AWS"
+      identifiers = ["${aws_cloudfront_origin_access_identity.origin_access_identity.iam_arn}"]
+    }
+  }
+
+  statement {
+    actions   = ["s3:ListBucket"]
+    resources = ["${aws_s3_bucket.www.arn}"]
+
+    principals {
+      type        = "AWS"
+      identifiers = ["${aws_cloudfront_origin_access_identity.origin_access_identity.iam_arn}"]
+    }
+  }
+}
+
+resource "aws_s3_bucket_policy" "www_s3_iam" {
+  bucket = "${var.www_domain_name}"
+  policy = "${data.aws_iam_policy_document.www_policy.json}"
+}
+
+// Empty bucket to back redirect. There might be a better way.
 resource "aws_s3_bucket" "root" {
   bucket   = "${var.root_domain_name}"
   acl      = "public-read"
@@ -121,6 +151,10 @@ resource "aws_acm_certificate_validation" "cert" {
   ]
 }
 
+resource "aws_cloudfront_origin_access_identity" "origin_access_identity" {
+  comment = "www.scottjab.codes"
+}
+
 resource "aws_cloudfront_distribution" "www_distribution" {
   origin {
     custom_origin_config {
@@ -128,6 +162,10 @@ resource "aws_cloudfront_distribution" "www_distribution" {
       https_port             = "443"
       origin_protocol_policy = "http-only"
       origin_ssl_protocols   = ["TLSv1", "TLSv1.1", "TLSv1.2"]
+    }
+
+    s3_origin_config {
+      origin_access_identity = "${aws_cloudfront_origin_access_identity.origin_access_identity.cloudfront_access_identity_path}"
     }
 
     domain_name = "${aws_s3_bucket.www.website_endpoint}"
