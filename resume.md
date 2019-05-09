@@ -4,7 +4,7 @@
 > [Download PDF](resume.pdf)
 > [scottjab@gmail.com](mailto:scottjab@gmail.com)
 > [GitHub](https://github.com/scottjab)
-> (937) 239-4954
+> (937) 239-4054
 
 ------
 
