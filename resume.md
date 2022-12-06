@@ -9,7 +9,7 @@
 
 ### Profile {#profile}
 
-A curious Staff Software Engineer with 16 years of experience and a infrastructure background. Skilled at scaling out systems from 0 users to millions. Self driven and believes that though iteration most difficult problems can be solved. 
+A curious Staff Software Engineer with 16 years of experience and an infrastructure background. Skilled at scaling out systems from zero users to millions. Self driven and believes that through iteration, most difficult problems can be solved. 
 
 ------
 
@@ -47,7 +47,7 @@ A curious Staff Software Engineer with 16 years of experience and a infrastructu
 Squarespace (Remote)
 : *Tech Lead*
   _June 2019-Aug 2022_
-  Started as the Teach Lead for the MongoDB subteam on the Databases team.  The first main task was scaling the large sharded MongoDB clusters. Migrated backups to a snapshot system in GCP, and worked with engineering teams to fix data modeles that did not scale. 
+  Started as the Tech Lead for the MongoDB subteam on the Databases team.  The first main task was scaling the large sharded MongoDB clusters. Migrated backups to a snapshot system in GCP, and worked with engineering teams to fix data models that did not scale. 
   
   I ended my tenure at Squarespace as the Tech Lead for Data Infrastructure. My team was responsible for all streaming and data processing infrastructure. In a short time we were able to migrate two legacy on-premises aging Hadoop clusters to Dataproc in GCP.  During this migration I worked with many teams to burn down technical debt and migrate many ETLs and reports to offerings based in GCP.
 
