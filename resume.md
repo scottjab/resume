@@ -1,26 +1,22 @@
 # James Scott
-## Infrastructure Engineer, Site Reliability Engineer
+## Staff Infrastructure Engineer, Site Reliability Engineer
 
-> [Download PDF](resume.pdf)
 > [scottjab@gmail.com](mailto:scottjab@gmail.com)
-> [GitHub](https://github.com/scottjab)
+> [GitHub @scottjab](https://github.com/scottjab)
 > (937) 239-4054
 
 ------
 
 ### Profile {#profile}
 
-A curious Software Engineer with 13 years of experience and a DevOps  background. Skilled at scaling out systems from 0 users to millions. Self driven and believes that though iteration most difficult problems can be solved. 
+A curious Staff Software Engineer with 16 years of experience and a infrastructure background. Skilled at scaling out systems from 0 users to millions. Self driven and believes that though iteration most difficult problems can be solved. 
 
 ------
 
 ### Skills {#skills}
-* Reliable Observable Operations
-  : Systems that can be seen can be fixed.
-* Distributed System Design
-  : Designed hardened production systems that handle mission critical work loads at global scales. 
-* Self Directed
-  : Has worked remote for 3 years, and has a proven record to deliver results.
+* Reliable Observable Operations: Systems that can be seen can be fixed.
+* Distributed System Design: Designed hardened production systems that handle mission critical work loads at global scales. 
+* Self Directed: Has worked remote for 7 years, and has a proven record to deliver results.
 
 ------
 
@@ -41,10 +37,19 @@ A curious Software Engineer with 13 years of experience and a DevOps  background
 1. hbase
 1. cassandra
 1. git
+1. hadoop
+1. hive
+1. Dataproc
 
 ------
 
 ### Experience {#experience}
+Squarespace (Remote)
+: *Tech Lead*
+  _June 2019-Aug 2022_
+  Started as the Teach Lead for the MongoDB subteam on the Databases team.  The first main task was scaling the large sharded MongoDB clusters. Migrated backups to a snapshot system in GCP, and worked with engineering teams to fix data modeles that did not scale. 
+  
+  I ended my tenure at Squarespace as the Tech Lead for Data Infrastructure. My team was responsible for all streaming and data processing infrastructure. In a short time we were able to migrate two legacy on-premises aging Hadoop clusters to Dataproc in GCP.  During this migration I worked with many teams to burn down technical debt and migrate many ETLs and reports to offerings based in GCP.
 
 Stripe (Remote)
 : *Software Engineer*
