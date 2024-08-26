@@ -46,11 +46,14 @@ A curious Staff Software Engineer with 18 years of experience and an infrastruct
 ------
 
 ### Experience {#experience}
-PlanetScale (Remote)
-: * Software Engineer Edge*
-_Jan 2023-Mar 2024_
 
-At PlanetScale I worked with the edge team which was responsible for the proxy layer that sits in front of the product. During my time at PlanetScale I was responsible for the deployment of the edge service, as well as the service itself.   When I joined, the Edge service was unique at PlanetScale as it did not live in kubernetes and was hand deployed.  I developed a deployment system that used Hashicorp Nomad's exec driver to deploy the service, and run configuration management without ssh, or the need of a configuration management service. This project allowed us to replace our edge VMs every 14 days automatically with zero downtime. This allowed the service to automatically scale with the needs of our users.
+PlanetScale (Remote)
+: *Software Engineer Edge*
+  _Jan 2023-Mar 2024_
+
+  At PlanetScale I worked with the edge team which was responsible for the proxy layer that sits in front of the product. During my time at PlanetScale I was responsible for the deployment of the edge service, as well as the service itself.
+  
+  When I joined, the Edge service was unique at PlanetScale as it did not live in kubernetes and was hand deployed.  I developed a deployment system that used Hashicorp Nomad's exec driver to deploy the service, and run configuration management without ssh, or the need of a configuration management service. This project allowed us to replace our edge VMs every 14 days automatically with zero downtime. This allowed the service to automatically scale with the needs of our users.
 
 Squarespace (Remote)
 : *Tech Lead*
