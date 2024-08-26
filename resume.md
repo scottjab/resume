@@ -9,14 +9,14 @@
 
 ### Profile {#profile}
 
-A curious Staff Software Engineer with 16 years of experience and an infrastructure background. Skilled at scaling out systems from zero users to millions. Self driven and believes that through iteration, most difficult problems can be solved. 
+A curious Staff Software Engineer with 18 years of experience and an infrastructure background. Skilled at scaling out systems from zero users to millions. Self driven and believes that through iteration, most difficult problems can be solved. 
 
 ------
 
 ### Skills {#skills}
 * Reliable Observable Operations: Systems that can be seen can be fixed.
 * Distributed System Design: Designed hardened production systems that handle mission critical work loads at global scales. 
-* Self Directed: Has worked remote for 7 years, and has a proven record to deliver results.
+* Self Directed: Has worked remote for 8 years, and has a proven record to deliver results.
 
 ------
 
@@ -40,10 +40,18 @@ A curious Staff Software Engineer with 16 years of experience and an infrastruct
 1. hadoop
 1. hive
 1. Dataproc
+1. Nomad
+1. Vault
 
 ------
 
 ### Experience {#experience}
+PlanetScale (Remote)
+: * Software Engineer Edge*
+_Jan 2023-Mar 2024_
+
+At PlanetScale I worked with the edge team which was responsible for the proxy layer that sits in front of the product. During my time at PlanetScale I was responsible for the deployment of the edge service, as well as the service itself.   When I joined, the Edge service was unique at PlanetScale as it did not live in kubernetes and was hand deployed.  I developed a deployment system that used Hashicorp Nomad's exec driver to deploy the service, and run configuration management without ssh, or the need of a configuration management service. This project allowed us to replace our edge VMs every 14 days automatically with zero downtime. This allowed the service to automatically scale with the needs of our users.
+
 Squarespace (Remote)
 : *Tech Lead*
   _June 2019-Aug 2022_
